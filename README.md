@@ -12,4 +12,4 @@ Za vsako tekmo bom zajel:
 Delovne hipoteze:
 * Katere ekipe so imele uspešnejšo sezono - tiste, ki so pretežno metale za dve točki ali za tri točke?
 * Ali so bile v medsebojnih tekmah uspešnejše ekipe, ki so več metale za dve točki ali za tri točke?
-* Kako je način igre (igra pod košem ali igra z meti za tri točke) vplival na ostale pomebne statistične podatke?
+* Kako je dominantni način igre (igra pod košem ali igra z meti za tri točke) vplival na ostale pomebne statistične podatke?
