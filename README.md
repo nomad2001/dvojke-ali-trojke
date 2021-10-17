@@ -1,5 +1,4 @@
 # Igra pod košem ali metanje trojk?
-=======================
 
 Analiziral bom vse tekme lige NBA iz sezone 2020/2021 na strani
 [ESPN](https://www.espn.com/nba/scoreboard).
