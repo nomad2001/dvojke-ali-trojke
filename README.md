@@ -5,7 +5,7 @@ Analiziral bom vse tekme lige NBA iz sezone 2020/2021 na strani
 
 Za vsako tekmo bom zajel:
 * ekipi, ki sta tekmo igrali
-* končni izzid
+* končni izid
 * število vseh in število uspešnih prostih metov, metov za dve in za tri točke 
 * preostalo statistiko, kot so: skoki, asistence, izgubljene žoge, osebne napake ipd.
 
