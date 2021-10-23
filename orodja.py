@@ -30,10 +30,13 @@ def shrani_spletno_stran(url, ime_datoteke, vsili_prenos=False):
 
         if r.text != "":
             count = count + 1
-        pripravi_imenik(ime_datoteke)
-        with open(ime_datoteke, 'a', encoding='utf-8') as datoteka:
-            datoteka.write(r.text)
-            print('shranjeno!')
+            pripravi_imenik(ime_datoteke)
+            with open(ime_datoteke, 'a', encoding='utf-8') as datoteka:
+                datoteka.write(r.text)
+                print('shranjeno!')
+                print(count)
+        else:
+            print('preskočeno!')
             print(count)
 
 
