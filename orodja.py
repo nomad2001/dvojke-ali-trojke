@@ -4,6 +4,8 @@ import os
 import requests
 import sys
 
+global count
+count = 0
 
 def pripravi_imenik(ime_datoteke):
     '''Če še ne obstaja, pripravi prazen imenik za dano datoteko.'''
@@ -20,14 +22,19 @@ def shrani_spletno_stran(url, ime_datoteke, vsili_prenos=False):
         if os.path.isfile(ime_datoteke) and not vsili_prenos:
             print('shranjeno že od prej!')
             return
-        r = requests.get(url)
+        r = requests.get(url, allow_redirects=False)
     except requests.exceptions.ConnectionError:
         print('stran ne obstaja!')
     else:
+        global count
+
+        if r.text != "":
+            count = count + 1
         pripravi_imenik(ime_datoteke)
         with open(ime_datoteke, 'w', encoding='utf-8') as datoteka:
             datoteka.write(r.text)
             print('shranjeno!')
+            print(count)
 
 
 def vsebina_datoteke(ime_datoteke):
