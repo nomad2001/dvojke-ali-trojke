@@ -1,6 +1,6 @@
 import orodja
 import re
-
+#<td class="name">TEAM
 url = "https://www.espn.com/nba/boxscore/_/gameId/"
 url_wrong = "https://www.espn.com/nba/scoreboard"
 html_tekme_redne = "tekme_redne.html"
@@ -15,7 +15,7 @@ id_prve_redne_tekme = 401266805
 id_zadnje_redne_tekme = 401307891
 id_prve_playoff_tekme = 401327715
 id_zadnje_playoff_tekme = 401344140
-#shrani_tekme_v_html(id_prve_redne_tekme,id_zadnje_redne_tekme,html_tekme_redne,True)
+
 def shrani_tekme_v_html(zacetni_id, koncni_id, ime_datoteke, vsili_prenos = False):
     for i in range(zacetni_id, koncni_id + 1):
         orodja.shrani_spletno_stran(url + str(i), ime_datoteke, vsili_prenos)
@@ -48,11 +48,70 @@ def razbij_datoteko_na_tri(ime_datoteke, ciljna_dat1, ciljna_dat2, ciljna_dat3):
             dat.write(f"{i + 1}. tekma\n")
             dat.write(tekme[i])
 
+def poisci_tekme_v_html(ime_datoteke):
+    with open(ime_datoteke, "r", encoding="utf-8") as dat:
+        besedilo = dat.read()
+
+    rx = re.compile(r"tekma(.*?)tekma",re.DOTALL)
+    tekme = re.findall(rx, besedilo)
+    return tekme
+
+def izlusci_statistiko_tekme(id, ekipe, tekma):
+    gesla = ['FG','3PT', 'FT', 'OREB', 'DREB', 'REB', 'AST', 'STL', 'BLK', 'TO', 'PF', 'PTS']
+    imeni = re.findall(r'<td class="team-name">(?P<Team>.+?)</td>', tekma)
+    rx = re.compile(r'<td class="name">TEAM</td><td class="min"></td>'
+                    r'<td class="fg">(?P<FG>.*?)</td>'
+                    r'<td class="3pt">(?P<THREEPT>.*?)</td>'
+                    r'<td class="ft">(?P<FT>.*?)</td>'
+                    r'<td class="oreb">(?P<OREB>.*?)</td>'
+                    r'<td class="dreb">(?P<DREB>.*?)</td>'
+                    r'<td class="reb">(?P<REB>.*?)</td>'
+                    r'<td class="ast">(?P<AST>.*?)</td>'
+                    r'<td class="stl">(?P<STL>.*?)</td>'
+                    r'<td class="blk">(?P<BLK>.*?)</td>'
+                    r'<td class="to">(?P<TO>.*?)</td>'
+                    r'<td class="pf">(?P<PF>.*?)</td>'
+                    r'<td class="plusminus"></td>'
+                    r'<td class="pts">(?P<PTS>.*?)</td>',
+                    re.DOTALL)
+
+    statistika = re.findall(rx, tekma)
+    dict1 = {gesla[i] : statistika[0][i] for i in range(len(gesla))}
+    dict2 = {gesla[i] : statistika[1][i] for i in range(len(gesla))}
+    
+    if imeni[0] not in ekipe.keys():
+        ekipe[imeni[0]] = len(ekipe) + 1
+
+    if imeni[1] not in ekipe.keys():
+        ekipe[imeni[1]] = len(ekipe) + 1
+
+    dict1["Team"] = ekipe[imeni[0]]
+    dict2["Team"] = ekipe[imeni[1]]
+    dict1["Tekma"] = id
+    dict2["Tekma"] = id
+    return [dict1, dict2]
+
 def main(redownload=True, reparse=True):
     # Najprej v lokalno datoteko shranimo glavno stran
     #################shrani_tekme_v_html(id_prve_redne_tekme,id_zadnje_redne_tekme,html_tekme_redne,True)
-    razbij_datoteko_na_tri(html_tekme_redne, html_tekme_redne1, html_tekme_redne2, html_tekme_redne3)
+    #################razbij_datoteko_na_tri(html_tekme_redne, html_tekme_redne1, html_tekme_redne2, html_tekme_redne3)
+    #################shrani_tekme_v_html(id_prve_playoff_tekme, id_zadnje_playoff_tekme, html_tekme_playoff, True)
     # Iz lokalne (html) datoteke preberemo podatke
+    tekme_v_html = []
+    tekme_v_html.append(poisci_tekme_v_html(html_tekme_redne1))
+    tekme_v_html.append(poisci_tekme_v_html(html_tekme_redne2))
+    tekme_v_html.append(poisci_tekme_v_html(html_tekme_redne3))
+    tekme = []
+    ekipe = {}
+    
+    for i in range(len(tekme_v_html)):
+        #print(tekme_v_html[i])
+        tekme.append(izlusci_statistiko_tekme(i, ekipe, str(tekme_v_html[i])))
+        print(i)
+    
+    gesla = ['Tekma', 'Team' ,'FG', '3PT', 'FT', 'OREB', 'DREB', 'REB', 
+                                    'AST', 'STL', 'BLK', 'TO', 'PF', 'PTS']
+    orodja.zapisi_csv(tekme, gesla, csv_tekme_redni_del)
 
     # Podatke preberemo v lepšo obliko (seznam slovarjev)
 
@@ -61,6 +120,7 @@ def main(redownload=True, reparse=True):
     # Dodatno: S pomočjo parametrov funkcije main omogoči nadzor, ali se
     # celotna spletna stran ob vsakem zagon prenese (četudi že obstaja)
     # in enako za pretvorbo
+    #raise NotImplementedError()
 
 
 if __name__ == '__main__':
