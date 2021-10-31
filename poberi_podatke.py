@@ -52,7 +52,7 @@ def poisci_tekme_v_html(ime_datoteke):
     with open(ime_datoteke, "r", encoding="utf-8") as dat:
         besedilo = dat.read()
 
-    rx = re.compile(r"tekma(.*?)tekma",re.DOTALL)
+    rx = re.compile(r"(?=tekma(.*?)tekma)",re.DOTALL)
     tekme = re.findall(rx, besedilo)
     return tekme
 
@@ -98,16 +98,17 @@ def main(redownload=True, reparse=True):
     #################shrani_tekme_v_html(id_prve_playoff_tekme, id_zadnje_playoff_tekme, html_tekme_playoff, True)
     # Iz lokalne (html) datoteke preberemo podatke
     tekme_v_html = []
-    tekme_v_html.append(poisci_tekme_v_html(html_tekme_redne1))
-    tekme_v_html.append(poisci_tekme_v_html(html_tekme_redne2))
-    tekme_v_html.append(poisci_tekme_v_html(html_tekme_redne3))
+    tekme_v_html.extend(poisci_tekme_v_html(html_tekme_redne1))
+    tekme_v_html.extend(poisci_tekme_v_html(html_tekme_redne2))
+    tekme_v_html.extend(poisci_tekme_v_html(html_tekme_redne3))
     tekme = []
     ekipe = {}
+    print(len(tekme_v_html))
     
     for i in range(len(tekme_v_html)):
         #print(tekme_v_html[i])
         tekme.append(izlusci_statistiko_tekme(i, ekipe, str(tekme_v_html[i])))
-        print(i)
+     #   print(i)
     
     gesla = ['Tekma', 'Team' ,'FG', '3PT', 'FT', 'OREB', 'DREB', 'REB', 
                                     'AST', 'STL', 'BLK', 'TO', 'PF', 'PTS']
