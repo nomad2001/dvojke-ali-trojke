@@ -1,3 +1,4 @@
+from os import stat
 import orodja
 import re
 #<td class="name">TEAM
@@ -76,6 +77,14 @@ def izlusci_statistiko_tekme(id, ekipe, tekma):
                     re.DOTALL)
 
     statistika = re.findall(rx, tekma)
+
+    if len(statistika) == 0 or len(imeni) == 0: ###Pri nekaterih tekmah ni statistike oz. imen ekipe, ker 
+        return []                               ###je bila tekma preložena zaradi zaznane okužbe s COVID-om
+                                                ###pri kakšnem izmed igralcev
+    
+    #if id == 8:
+    #    with open("test.html","w",encoding="utf-8") as dat:
+    #        dat.write(tekma)
     dict1 = {gesla[i] : statistika[0][i] for i in range(len(gesla))}
     dict2 = {gesla[i] : statistika[1][i] for i in range(len(gesla))}
     
@@ -103,17 +112,16 @@ def main(redownload=True, reparse=True):
     tekme_v_html.extend(poisci_tekme_v_html(html_tekme_redne3))
     tekme = []
     ekipe = {}
-    print(len(tekme_v_html))
+    #print(len(tekme_v_html))
     
     for i in range(len(tekme_v_html)):
         #print(tekme_v_html[i])
-        tekme.append(izlusci_statistiko_tekme(i, ekipe, str(tekme_v_html[i])))
-     #   print(i)
-    
+        #print(str(i) + " ", end='')
+        tekme.extend(izlusci_statistiko_tekme(i, ekipe, str(tekme_v_html[i])))
+   # print(tekme)
     gesla = ['Tekma', 'Team' ,'FG', '3PT', 'FT', 'OREB', 'DREB', 'REB', 
                                     'AST', 'STL', 'BLK', 'TO', 'PF', 'PTS']
     orodja.zapisi_csv(tekme, gesla, csv_tekme_redni_del)
-
     # Podatke preberemo v lepšo obliko (seznam slovarjev)
 
     # Podatke shranimo v csv datoteko
@@ -126,3 +134,5 @@ def main(redownload=True, reparse=True):
 
 if __name__ == '__main__':
     main()
+#<td class="name">TEAM</td><td class="min"></td><td class="fg">.*?</td><td class="3pt">.*?</td><td class="ft">.*?</td><td class="oreb">.*?</td><td class="dreb">.*?</td><td class="reb">.*?</td><td class="ast">.*?</td><td class="stl">.*?</td><td class="blk">.*?</td><td class="to">.*?</td><td class="pf">.*?</td><td class="plusminus"></td><td class="pts">.*?</td>
+#<td class="name">TEAM</td><td class="min"></td><td class="fg">(?<FG>.*?)</td><td class="3pt">(?<THREEPT>.*?)</td><td class="ft">(?<FT>.*?)</td><td class="oreb">(?<OREB>.*?)</td><td class="dreb">(?<DREB>.*?)</td><td class="reb">(?<REB>.*?)</td><td class="ast">(?<AST>.*?)</td><td class="stl">(?<STL>.*?)</td><td class="blk">(?<BLK>.*?)</td><td class="to">(?<TO>.*?)</td><td class="pf">(?<PF>.*?)</td><td class="plusminus"></td><td class="pts">(?<PTS>.*?)</td>
