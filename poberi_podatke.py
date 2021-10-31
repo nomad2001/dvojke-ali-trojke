@@ -100,32 +100,29 @@ def izlusci_statistiko_tekme(id, ekipe, tekma):
     dict2["Tekma"] = id
     return [dict1, dict2]
 
+def zapisi_datoteke_v_csv(datoteke):
+    tekme_v_html = []
+
+    for datoteka in datoteke:
+        tekme_v_html.extend(poisci_tekme_v_html(datoteka))
+        
+    tekme = []
+    ekipe = {}
+    
+    for i in range(len(tekme_v_html)):
+        tekme.extend(izlusci_statistiko_tekme(i, ekipe, str(tekme_v_html[i])))
+
+    gesla = ['Tekma', 'Team' ,'FG', '3PT', 'FT', 'OREB', 'DREB', 'REB', 
+                                    'AST', 'STL', 'BLK', 'TO', 'PF', 'PTS']
+    orodja.zapisi_csv(tekme, gesla, csv_tekme_redni_del)
+
 def main(redownload=True, reparse=True):
     # Najprej v lokalno datoteko shranimo glavno stran
     #################shrani_tekme_v_html(id_prve_redne_tekme,id_zadnje_redne_tekme,html_tekme_redne,True)
     #################razbij_datoteko_na_tri(html_tekme_redne, html_tekme_redne1, html_tekme_redne2, html_tekme_redne3)
     #################shrani_tekme_v_html(id_prve_playoff_tekme, id_zadnje_playoff_tekme, html_tekme_playoff, True)
-    # Iz lokalne (html) datoteke preberemo podatke
-    tekme_v_html = []
-    tekme_v_html.extend(poisci_tekme_v_html(html_tekme_redne1))
-    tekme_v_html.extend(poisci_tekme_v_html(html_tekme_redne2))
-    tekme_v_html.extend(poisci_tekme_v_html(html_tekme_redne3))
-    tekme = []
-    ekipe = {}
-    #print(len(tekme_v_html))
-    
-    for i in range(len(tekme_v_html)):
-        #print(tekme_v_html[i])
-        #print(str(i) + " ", end='')
-        tekme.extend(izlusci_statistiko_tekme(i, ekipe, str(tekme_v_html[i])))
-   # print(tekme)
-    gesla = ['Tekma', 'Team' ,'FG', '3PT', 'FT', 'OREB', 'DREB', 'REB', 
-                                    'AST', 'STL', 'BLK', 'TO', 'PF', 'PTS']
-    orodja.zapisi_csv(tekme, gesla, csv_tekme_redni_del)
-    # Podatke preberemo v lepšo obliko (seznam slovarjev)
-
     # Podatke shranimo v csv datoteko
-
+    zapisi_datoteke_v_csv([html_tekme_redne1, html_tekme_redne2, html_tekme_redne3])
     # Dodatno: S pomočjo parametrov funkcije main omogoči nadzor, ali se
     # celotna spletna stran ob vsakem zagon prenese (četudi že obstaja)
     # in enako za pretvorbo
