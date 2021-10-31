@@ -1,7 +1,7 @@
 from os import stat
 import orodja
 import re
-#<td class="name">TEAM
+
 url = "https://www.espn.com/nba/boxscore/_/gameId/"
 url_wrong = "https://www.espn.com/nba/scoreboard"
 html_tekme_redne = "tekme_redne.html"
@@ -79,12 +79,8 @@ def izlusci_statistiko_tekme(id, ekipe, tekma):
     statistika = re.findall(rx, tekma)
 
     if len(statistika) == 0 or len(imeni) == 0: ###Pri nekaterih tekmah ni statistike oz. imen ekipe, ker 
-        return []                               ###je bila tekma preložena zaradi zaznane okužbe s COVID-om
-                                                ###pri kakšnem izmed igralcev
+        return []                               ###je bila tekma preložena
     
-    #if id == 8:
-    #    with open("test.html","w",encoding="utf-8") as dat:
-    #        dat.write(tekma)
     dict1 = {gesla[i] : statistika[0][i] for i in range(len(gesla))}
     dict2 = {gesla[i] : statistika[1][i] for i in range(len(gesla))}
     
@@ -100,7 +96,7 @@ def izlusci_statistiko_tekme(id, ekipe, tekma):
     dict2["Tekma"] = id
     return [dict1, dict2]
 
-def zapisi_datoteke_v_csv(datoteke):
+def zapisi_datoteke_v_csv(datoteke, csv_datoteka):
     tekme_v_html = []
 
     for datoteka in datoteke:
@@ -114,7 +110,7 @@ def zapisi_datoteke_v_csv(datoteke):
 
     gesla = ['Tekma', 'Team' ,'FG', '3PT', 'FT', 'OREB', 'DREB', 'REB', 
                                     'AST', 'STL', 'BLK', 'TO', 'PF', 'PTS']
-    orodja.zapisi_csv(tekme, gesla, csv_tekme_redni_del)
+    orodja.zapisi_csv(tekme, gesla, csv_datoteka)
 
 def main(redownload=True, reparse=True):
     # Najprej v lokalno datoteko shranimo glavno stran
@@ -122,10 +118,8 @@ def main(redownload=True, reparse=True):
     #################razbij_datoteko_na_tri(html_tekme_redne, html_tekme_redne1, html_tekme_redne2, html_tekme_redne3)
     #################shrani_tekme_v_html(id_prve_playoff_tekme, id_zadnje_playoff_tekme, html_tekme_playoff, True)
     # Podatke shranimo v csv datoteko
-    zapisi_datoteke_v_csv([html_tekme_redne1, html_tekme_redne2, html_tekme_redne3])
-    # Dodatno: S pomočjo parametrov funkcije main omogoči nadzor, ali se
-    # celotna spletna stran ob vsakem zagon prenese (četudi že obstaja)
-    # in enako za pretvorbo
+    #################zapisi_datoteke_v_csv([html_tekme_redne1, html_tekme_redne2, html_tekme_redne3], csv_tekme_redni_del)
+    zapisi_datoteke_v_csv([html_tekme_playoff], csv_tekme_playoff)
     #raise NotImplementedError()
 
 
