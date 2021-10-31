@@ -6,7 +6,7 @@ Analiziral bom vse tekme lige NBA iz sezone 2020/2021 na strani
 Podatki, ki jih bom analiziral, se nahajajo v mapi statistika-v-csv. V vsaki CSV datoteki se
 nahajajo naslednji podatki:
 * V datoteki ekipe.csv sta za vsako ekipo v svoji vrstici navedena unikaten id ekipe in unikatna okrajšava imena ekipe. Ekipi z identifikacijskimi številkami 31 in 32 sta ekipi zvezdnikov, ki sta nastopili le na All-Star tekmi, in ne bosta vključeni v analizo.
-* V datoteki tekme_redne.csv so podatki za vsako posamezno tekmo iz rednega dela sezone navedeni v dveh vrsticah. Obe vrstici se začneta z unikatno identifikacijsko številko tekme. V prvi vrstici sta za tem navedena unikaten id gostujoče ekipe ter njena statistika. V drugi vrstici sta za identifikacijsko številko tekme navedena unikaten id domače ekipe in njena statistika. Okrajšave v statistiki imajo naslednje pomene:
+* V datoteki tekme_redne.csv so podatki za vsako posamezno tekmo iz rednega dela sezone navedeni v dveh vrsticah. Obe vrstici se začneta z unikatno identifikacijsko številko tekme. V prvi vrstici sta za tem navedena id gostujoče ekipe ter njena statistika. V drugi vrstici sta za identifikacijsko številko tekme navedena id domače ekipe in njena statistika. Okrajšave v statistiki imajo naslednje pomene:
     * FG - število uspešnih in vseh metov iz igre (za dve in za tri točke skupaj, brez prostih metov)
     * 3PT - število uspešnih in vseh metov za tri točke
     * FT - število uspešnih in vseh prostih metov
