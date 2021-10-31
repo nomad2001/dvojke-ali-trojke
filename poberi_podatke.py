@@ -77,8 +77,8 @@ def izlusci_statistiko_tekme(id, ekipe, tekma):
 
     statistika = re.findall(rx, tekma)
 
-    if len(statistika) == 0 or len(imeni) == 0: ###Pri nekaterih tekmah ni statistike oz. imen ekipe, ker 
-        return []                               ###je bila tekma preložena
+    if len(statistika) == 0 or len(imeni) == 0: ###Pri nekaterih tekmah ni statistike oz. imen ekip, 
+        return []                               ###ker je bila tekma preložena
     
     dict1 = {gesla[i] : statistika[0][i] for i in range(len(gesla))}
     dict2 = {gesla[i] : statistika[1][i] for i in range(len(gesla))}
@@ -123,19 +123,17 @@ def zapisi_tekme_v_csv(datoteke, ekipe, csv_datoteka):
     orodja.zapisi_csv(tekme, gesla, csv_datoteka)
 
 def main(redownload=True, reparse=True):
-    # Najprej v lokalno datoteko shranimo glavno stran
-    #################shrani_tekme_v_html(id_prve_redne_tekme,id_zadnje_redne_tekme,html_tekme_redne,True)
-    #################razbij_datoteko_na_tri(html_tekme_redne, html_tekme_redne1, html_tekme_redne2, html_tekme_redne3)
-    #################shrani_tekme_v_html(id_prve_playoff_tekme, id_zadnje_playoff_tekme, html_tekme_playoff, True)
-    # Podatke shranimo v csv datoteko
+    # Najprej v lokalne datoteke shranimo vse strani (nujno je razbitje na več datotek, saj bi ena
+    # bila prevelika za GitHub)
+    shrani_tekme_v_html(id_prve_redne_tekme,id_zadnje_redne_tekme,html_tekme_redne,True)
+    razbij_datoteko_na_tri(html_tekme_redne, html_tekme_redne1, html_tekme_redne2, html_tekme_redne3)
+    shrani_tekme_v_html(id_prve_playoff_tekme, id_zadnje_playoff_tekme, html_tekme_playoff, True)
+    # Podatke shranimo v csv datoteke
     ekipe = {}
     zapisi_tekme_v_csv([html_tekme_redne1, html_tekme_redne2, html_tekme_redne3], ekipe, csv_tekme_redni_del)
     zapisi_tekme_v_csv([html_tekme_playoff], ekipe, csv_tekme_playoff)
     zapisi_ekipe_v_csv(slovar_ekip_v_seznam_slovarjev(ekipe), csv_ekipe)
-    #raise NotImplementedError()
 
 
 if __name__ == '__main__':
     main()
-#<td class="name">TEAM</td><td class="min"></td><td class="fg">.*?</td><td class="3pt">.*?</td><td class="ft">.*?</td><td class="oreb">.*?</td><td class="dreb">.*?</td><td class="reb">.*?</td><td class="ast">.*?</td><td class="stl">.*?</td><td class="blk">.*?</td><td class="to">.*?</td><td class="pf">.*?</td><td class="plusminus"></td><td class="pts">.*?</td>
-#<td class="name">TEAM</td><td class="min"></td><td class="fg">(?<FG>.*?)</td><td class="3pt">(?<THREEPT>.*?)</td><td class="ft">(?<FT>.*?)</td><td class="oreb">(?<OREB>.*?)</td><td class="dreb">(?<DREB>.*?)</td><td class="reb">(?<REB>.*?)</td><td class="ast">(?<AST>.*?)</td><td class="stl">(?<STL>.*?)</td><td class="blk">(?<BLK>.*?)</td><td class="to">(?<TO>.*?)</td><td class="pf">(?<PF>.*?)</td><td class="plusminus"></td><td class="pts">(?<PTS>.*?)</td>
