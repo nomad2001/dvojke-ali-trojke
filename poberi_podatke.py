@@ -3,7 +3,6 @@ import orodja
 import re
 
 url = "https://www.espn.com/nba/boxscore/_/gameId/"
-url_wrong = "https://www.espn.com/nba/scoreboard"
 html_tekme_redne = "tekme_redne.html"
 html_tekme_redne1 = "tekme_redne1.html"
 html_tekme_redne2 = "tekme_redne2.html"
@@ -96,14 +95,25 @@ def izlusci_statistiko_tekme(id, ekipe, tekma):
     dict2["Tekma"] = id
     return [dict1, dict2]
 
-def zapisi_datoteke_v_csv(datoteke, csv_datoteka):
+def slovar_ekip_v_seznam_slovarjev(slovar):
+    seznam = []
+
+    for key, value in slovar.items():
+        seznam.append({"id" : value, "Team" : key})
+    
+    return seznam
+
+def zapisi_ekipe_v_csv(ekipe, csv_datoteka):
+    ekipe.sort(key=lambda ekipe: ekipe['id'])
+    orodja.zapisi_csv(ekipe, ['id', 'Team'], csv_datoteka)
+
+def zapisi_tekme_v_csv(datoteke, ekipe, csv_datoteka):
     tekme_v_html = []
 
     for datoteka in datoteke:
         tekme_v_html.extend(poisci_tekme_v_html(datoteka))
         
     tekme = []
-    ekipe = {}
     
     for i in range(len(tekme_v_html)):
         tekme.extend(izlusci_statistiko_tekme(i, ekipe, str(tekme_v_html[i])))
@@ -118,8 +128,10 @@ def main(redownload=True, reparse=True):
     #################razbij_datoteko_na_tri(html_tekme_redne, html_tekme_redne1, html_tekme_redne2, html_tekme_redne3)
     #################shrani_tekme_v_html(id_prve_playoff_tekme, id_zadnje_playoff_tekme, html_tekme_playoff, True)
     # Podatke shranimo v csv datoteko
-    #################zapisi_datoteke_v_csv([html_tekme_redne1, html_tekme_redne2, html_tekme_redne3], csv_tekme_redni_del)
-    zapisi_datoteke_v_csv([html_tekme_playoff], csv_tekme_playoff)
+    ekipe = {}
+    zapisi_tekme_v_csv([html_tekme_redne1, html_tekme_redne2, html_tekme_redne3], ekipe, csv_tekme_redni_del)
+    zapisi_tekme_v_csv([html_tekme_playoff], ekipe, csv_tekme_playoff)
+    zapisi_ekipe_v_csv(slovar_ekip_v_seznam_slovarjev(ekipe), csv_ekipe)
     #raise NotImplementedError()
 
 
