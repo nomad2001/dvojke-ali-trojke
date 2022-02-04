@@ -19,7 +19,7 @@ nahajajo naslednji podatki:
     * TO - izgubljene žoge
     * PF - osebne napake
     * PTS - končno število točk
-* V datoteki *tekme_playoff.csv* podatki navedeni na enak način kot v *tekme_redne.csv*, le da vsebujejo statistiko za tekme iz končnice.
+* V datoteki *tekme_playoff.csv* so podatki navedeni na enak način kot v *tekme_redne.csv*, le da vsebujejo statistiko za tekme iz končnice.
 
 Delovne hipoteze:
 * Katere ekipe so imele uspešnejšo sezono - tiste, ki so pretežno metale za dve točki ali za tri točke?
