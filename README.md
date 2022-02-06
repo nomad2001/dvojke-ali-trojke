@@ -37,4 +37,5 @@ Osrednja vprašanja, na katera sem odgovorjal so bila:
 * Ali so bile v medsebojnih tekmah uspešnejše ekipe, ki so več metale za dve točki ali za tri točke? Kako je vplivala uspešnost meta za tri točke?
 * Ali obstaja povezava med dominantnim načinom igre na posamezni tekmi (igra pod košem ali igra z meti za tri točke) in končnim številom točk na tej tekmi?
 
-V okviru zadnjega vprašanja, pa sem še spisal program, ki poskuša
+V okviru zadnjega vprašanja, pa sem še spisal program, ki poskuša na podlagi podatkov o metu za
+tri točke dveh ekip na neki tekmi uganiti končen izid te tekme.
